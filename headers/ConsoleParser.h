@@ -20,8 +20,8 @@ struct CONSOLE_FLAG{
 };
 
 
-int parse_flags (int argc, char **argv);
-void register_flag (char short_name[], char long_name[], flag_function_t *flag_function, size_t arguments_count);
+bool parse_flags (int argc, char **argv);
+bool register_flag (char short_name[], char long_name[], flag_function_t *flag_function, size_t arguments_count);
 CONSOLE_FLAG *search_flag (char *flag);
 int init_flags ();
 void close_flags ();

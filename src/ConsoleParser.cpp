@@ -3,31 +3,31 @@
 static struct CONSOLE_FLAG *registered_flags = NULL;
 static size_t flags_count = 0;
 
-int _init_flags_array_ = init_flags ();
+static int init_flags_array_ = init_flags ();
 
-int parse_flags (int argc, char **argv){
+bool parse_flags (int argc, char **argv){
     PushLog (2);
 
     custom_assert (argv != NULL, pointer_is_null, -1);
 
     if (argc < 2){
-        RETURN 0;
+        RETURN true;
     }
 
     struct CONSOLE_FLAG *current_flag = NULL;
     bool is_searching_flag = false;
     size_t arguments_readed = 0;
-    char ** current_arguments_begin = NULL;
+    char **current_arguments_begin = NULL;
 
     for (size_t argument_index = 1; argument_index < (size_t) argc; argument_index++){
 
         struct CONSOLE_FLAG *test_flag = NULL;
-        if ((test_flag = search_flag (*(argv + argument_index))) != NULL){
+        if ((test_flag = search_flag (argv [argument_index])) != NULL){
 
             current_flag = test_flag;
 
             if (is_searching_flag){
-                RETURN -1;
+                RETURN false;
             }
 
             is_searching_flag = true;
@@ -54,7 +54,7 @@ int parse_flags (int argc, char **argv){
 
     }
 
-    RETURN 0;
+    RETURN true;
 }
 
 CONSOLE_FLAG *search_flag (char *flag){
@@ -71,13 +71,13 @@ CONSOLE_FLAG *search_flag (char *flag){
     RETURN NULL;
 }
 
-void register_flag (char short_name[], char long_name[], flag_function_t *flag_function, size_t arguments_count){
+bool register_flag (char short_name[], char long_name[], flag_function_t *flag_function, size_t arguments_count){
     PushLog (2);
 
-    custom_assert (flag_function != NULL, pointer_is_null, (void)0);
-    custom_assert (short_name != NULL, pointer_is_null, (void)0);
-    custom_assert (long_name != NULL, pointer_is_null, (void)0);
-    custom_assert (long_name != short_name, not_enough_pointers, (void)0);
+    custom_assert (flag_function != NULL, pointer_is_null, false);
+    custom_assert (short_name != NULL, pointer_is_null, false);
+    custom_assert (long_name != NULL, pointer_is_null, false);
+    custom_assert (long_name != short_name, not_enough_pointers, false);
 
     strncpy (registered_flags [flags_count].short_name, short_name, MAX_FLAG_NAME_LENGTH);
     strncpy (registered_flags [flags_count].long_name,  long_name,   MAX_FLAG_NAME_LENGTH);
@@ -87,7 +87,7 @@ void register_flag (char short_name[], char long_name[], flag_function_t *flag_f
 
     flags_count++;
 
-    RETURN;
+    RETURN true;
 }
 
 int init_flags (){
