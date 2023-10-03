@@ -8,7 +8,7 @@ add_library (${PROJECT_NAME} STATIC src/ConsoleParser.cpp
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers)
 
 add_subdirectory (CustomAssert)
-target_link_libraries (${PROJECT_NAME} PUBLIC CustomAssert)
+target_link_libraries (${PROJECT_NAME} PRIVATE CustomAssert)
 
 
 
